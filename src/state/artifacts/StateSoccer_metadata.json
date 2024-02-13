@@ -16,10 +16,28 @@
 						"internalType": "string",
 						"name": "_team2",
 						"type": "string"
+					},
+					{
+						"internalType": "address[]",
+						"name": "_composes",
+						"type": "address[]"
 					}
 				],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "get_compose",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
 			},
 			{
 				"inputs": [],
@@ -30,32 +48,6 @@
 						"name": "",
 						"type": "string"
 					},
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "team1",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "team2",
-				"outputs": [
 					{
 						"internalType": "string",
 						"name": "",
@@ -94,11 +86,11 @@
 	},
 	"sources": {
 		"src/state/StateSoccer.sol": {
-			"keccak256": "0x17fb96027f7c3ca788d341c3d476a9ef110872351dc2225f89b1b17192cdcbe4",
+			"keccak256": "0xb585189311bed84ff2be7d1557451597e89e1c59ba1e2cdc2ca68a2fa26c21d9",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://fb445757e6b14735272e0d2918e0b9a53d3295a7e10c1b61c398a0b7151090e0",
-				"dweb:/ipfs/QmU17b2XW1xQxMYk1wnMhQHqimMeMgfMquqMqxe21QaY8D"
+				"bzz-raw://8bb24973569623a4af92f898d876cb1a20ca6775d61bf90612aefe1fd766d18e",
+				"dweb:/ipfs/QmZ89u3UFWU9LHA5HpEKPp3BbgMGMQrkwN1xGLCHVUNGjj"
 			]
 		}
 	},

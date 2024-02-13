@@ -8,11 +8,13 @@ import "../services/ServiceSoccer.sol";
 contract FactorySoccer {
     address public owner;
     address[] private states;
-    address[] private fools;
-    address[] private stores;
+    address[] private pools;
+    address[] private services;
     constructor() {
         owner = msg.sender;
     }
+
+    event GameCreated(address indexed pl, address indexed sv, address indexed st);
 
     modifier onlyOwner(string memory message) {
         require(msg.sender == owner, string(abi.encodePacked("Only contract owner can", message)));
@@ -20,8 +22,16 @@ contract FactorySoccer {
     }
 
     function init(string memory _team_name_1, string memory _team_name_2) external payable onlyOwner("Init") {
-        StateSoccer newStateSoccer = new StateSoccer(_team_name_1, _team_name_2);
+        PoolSoccer newPoolSoccer = new PoolSoccer();
+        pools.push(address(newPoolSoccer));
+        ServiceSoccer newServiceSoccer = new ServiceSoccer();
+        services.push(address(newServiceSoccer));
+        address[] memory composer = new address[](2); 
+        composer[0] = address(newPoolSoccer);
+        composer[1] = address(newServiceSoccer);
+        StateSoccer newStateSoccer = new StateSoccer(_team_name_1, _team_name_2, composer);
         states.push(address(newStateSoccer));
+        emit GameCreated(address(newPoolSoccer), address(newServiceSoccer), address(newStateSoccer));
     }
 
     function create_fool() external payable onlyOwner("Create Pool contract") {}
