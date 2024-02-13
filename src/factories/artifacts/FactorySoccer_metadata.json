@@ -1,0 +1,140 @@
+{
+	"compiler": {
+		"version": "0.8.24+commit.e11b9ed9"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "create_fool",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "create_state",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "create_store",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "get_states_address",
+				"outputs": [
+					{
+						"internalType": "address[]",
+						"name": "",
+						"type": "address[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_team_name_1",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_team_name_2",
+						"type": "string"
+					}
+				],
+				"name": "init",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"src/factories/FactorySoccer.sol": "FactorySoccer"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"src/factories/FactorySoccer.sol": {
+			"keccak256": "0x8505cec71a6271de7ce3767c0d148e63ac4310a7c6d6b2f2173a915c3f83ca41",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://2674d6c3233ee58864bc8fbcd34c51f64a34bb3428b39d818b0afe0428005ec2",
+				"dweb:/ipfs/QmRFeMojtwHg9wnkC3d1fNc8Vu8TWaTKZ1Gt183DcZh4nH"
+			]
+		},
+		"src/pools/PoolSoccer.sol": {
+			"keccak256": "0x3e962524f395a7bfe31f78c79e854c9066f2fb7d6fa9089b9fe07ab66cab9538",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://7f878ba1f2754bf30d50d22568818f590064f63f5deb4e91202d7d5883399a7b",
+				"dweb:/ipfs/QmSaLhj6JzWuUKv6upSbgM4Twz8gDfKyRNY2riUR9BA4C5"
+			]
+		},
+		"src/services/ServiceSoccer.sol": {
+			"keccak256": "0x8dae51bbc8a0a6fe03f031da4dacb48bd577b2ae8052f86db68b536c2a3d7ca0",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://0c837c36756f9ae003e3d2e9d3084574d3df53de7aea02d81749d99bb53a5c7d",
+				"dweb:/ipfs/QmNnHa9sV1FTFcpq1T1ouXuBPKaiaNSJ26cT6Hmu91TVKc"
+			]
+		},
+		"src/state/StateSoccer.sol": {
+			"keccak256": "0x4b998bfaa2042ac211c165b0ea8ea9470137741762b1854c16347e82c31da68e",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://ca711b83c8f7b8e1a4df79d2c331fe6ad7c5572807463356702d63549a0bce0b",
+				"dweb:/ipfs/QmQwbGEvVU5XsLFy8GvPkXE9fB8MCrZpWBaLt7V1tCi8kp"
+			]
+		}
+	},
+	"version": 1
+}
