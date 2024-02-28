@@ -11,11 +11,22 @@ contract PoolSoccer {
 
     event Deposit(address indexed sender, uint256 amount);
 
-    function place_bet(string _team, value) external payable {
+    function place_bet(string memory _team) public payable {
         StateSoccer state_contract = StateSoccer(state_address_contract);
-        state_contract.
+        state_contract.update_vault(msg.sender, _team, msg.value);
     }
 
-    function withdraw() external {}
+    function switch_side(string memory _team) external payable {
+        StateSoccer state_contract = StateSoccer(state_address_contract);
+        state_contract.switch_team(msg.sender, _team);
+    }
+
+    function get_vault() public view returns (uint256) { 
+        return address(this).balance;
+    }
+
+    function withdraw() external payable  {}
+
+    function claim() external payable {}
 }
     

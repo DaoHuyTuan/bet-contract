@@ -6,11 +6,15 @@ contract StateSoccer is IStateSoccer{
   string private team1;
   string private team2;
   address[] private composes;
-  mapping(address => uint256) public vault_team1;
-  mapping(address => uint256) public vault_team2;
+  struct Vault {
+    string team_name;
+    uint256 value;
+  }
+  mapping(address => Vault) public vault;
 
 
-  function update_composer(address[3] memory _composer) public payable  {
+
+  function update_composer(address[3] memory _composer) external payable {
     composes = _composer;
   }
 
@@ -23,16 +27,29 @@ contract StateSoccer is IStateSoccer{
     return (team1, team2);
   }
 
-  function update_vault(string memory team, uint256 value) external payable {
-    if (keccak256(abi.encodePacked(team)) == keccak256(abi.encodePacked(team1))) {
-      vault_team1[msg.sender] = value;
+  function update_vault(address sender, string memory team, uint256 amount) external payable {
+    if (vault[sender].value == 0) {
+      vault[sender] = Vault(team, amount);
+    } else {
+      uint256 new_amount = vault[sender].value + amount;
+      vault[sender].team_name = team;
+      vault[sender].value = new_amount;
     }
-    if (keccak256(abi.encodePacked(team)) == keccak256(abi.encodePacked(team2))) {
-      vault_team2[msg.sender] = value;
-    }
+  }
+
+  function switch_team(address sender, string memory team) external payable {
+    vault[sender].team_name = team;
+  }
+
+  function find_my_bet() external view returns (Vault memory) {
+    return vault[msg.sender];
   }
 
   function get_compose() public view returns (address[] memory) {
     return composes;
+  }
+
+  function update_rate() external {
+
   }
 }

@@ -23,13 +23,13 @@ contract FactorySoccer {
         _;
     }
 
-    function create_fool() external payable returns (address contract_address) {
-        PoolSoccer newPoolSoccer = new PoolSoccer();
+    function create_fool(address s) external payable returns (address contract_address) {
+        PoolSoccer newPoolSoccer = new PoolSoccer(s);
         return address(newPoolSoccer);
     }
 
-    function create_service() external payable returns (address contract_address) {
-        ServiceSoccer newServiceSoccer = new ServiceSoccer();
+    function create_service(address s) external payable returns (address contract_address) {
+        ServiceSoccer newServiceSoccer = new ServiceSoccer(s);
         return address(newServiceSoccer);
     }
 

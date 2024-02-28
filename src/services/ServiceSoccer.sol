@@ -8,8 +8,4 @@ contract ServiceSoccer {
   constructor(address service_contract) {
     
   }
-
-  function get_id() external view returns (uint256) {
-    return service_id;
-  }
 }
