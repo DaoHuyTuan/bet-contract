@@ -35,9 +35,9 @@ contract FactorySoccer {
 
     function init(string memory _team_name_1, string memory _team_name_2) external payable onlyOwner("Init") {
         address[3] memory _composer;
-        address pool_contract = this.create_fool();
-        address service_contract = this.create_service();
         StateSoccer state_contract = new StateSoccer();
+        address pool_contract = this.create_fool(address(state_contract));
+        address service_contract = this.create_service(address(state_contract));
         _composer[0] = pool_contract;
         _composer[1] = service_contract;
         _composer[2] = address(state_contract);

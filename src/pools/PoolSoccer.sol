@@ -1,18 +1,21 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 import "../Utils.sol";
+import "../state/StateSoccer.sol";
 
 contract PoolSoccer {
-    uint256 private pool_id;
-    constructor() {
-        pool_id = Utils.generate_unique_id("pool");
+    address state_address_contract;
+    constructor(address _state_contract) {
+        state_address_contract = _state_contract;
     }
 
-    function get_id() external view returns (uint256) {
-        return pool_id;
-    }
+    event Deposit(address indexed sender, uint256 amount);
 
-    function deposit() external {}
+    function place_bet(string _team, value) external payable {
+        StateSoccer state_contract = StateSoccer(state_address_contract);
+        state_contract.
+    }
 
     function withdraw() external {}
 }
+    
