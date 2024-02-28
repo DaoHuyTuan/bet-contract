@@ -12,3 +12,7 @@ docs/
 
 # Dotenv file
 .env
+/*/artifacts/build-info
+artifacts
+artifacts/build-info
+src/*/artifacts/*.json
