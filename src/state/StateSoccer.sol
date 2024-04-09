@@ -12,8 +12,6 @@ contract StateSoccer is IStateSoccer{
   }
   mapping(address => Vault) public vault;
 
-
-
   function update_composer(address[3] memory _composer) external payable {
     composes = _composer;
   }
@@ -47,6 +45,14 @@ contract StateSoccer is IStateSoccer{
 
   function get_compose() public view returns (address[] memory) {
     return composes;
+  }
+
+  function am_i_on_here() external view returns (bool) {
+    if (vault[msg.sender].value != 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   function update_rate() external {

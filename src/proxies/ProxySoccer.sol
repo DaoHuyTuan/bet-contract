@@ -33,7 +33,6 @@ contract ProxySoccer {
         } else {
             team2[msg.sender] = msg.value;
         }
-
         emit Bet_Placed(msg.sender, msg.value);
         // update_rate();
     }
