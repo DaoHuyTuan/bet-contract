@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 import "../Utils.sol";
 import "../state/StateSoccer.sol";
 
-contract PoolSoccer {
+contract VaultSoccer {
     address state_address_contract;
     constructor(address _state_contract) {
         state_address_contract = _state_contract;
