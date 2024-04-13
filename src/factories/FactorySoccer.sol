@@ -35,13 +35,13 @@ contract FactorySoccer {
         _;
     }
 
-    function create_vault(address s) external payable returns (address contract_address) {
+    function create_vault(address s) internal returns (address contract_address) {
         VaultSoccer newVaultSoccer = new VaultSoccer(s);
         emit GameVaultCreated(address(newVaultSoccer));
         return address(newVaultSoccer);
     }
 
-    function create_service(address s) external payable returns (address contract_address) {
+    function create_service(address s) internal returns (address contract_address) {
         ServiceSoccer newServiceSoccer = new ServiceSoccer(s);
         emit GameServiceCreated(address(newServiceSoccer));
         return address(newServiceSoccer);
@@ -50,8 +50,8 @@ contract FactorySoccer {
     function create_game(string memory _team_name_1, string memory _team_name_2) external payable onlyOwner("Init") {
         address[3] memory _composer;
         StateSoccer state_contract = new StateSoccer();
-        address vault_contract = this.create_vault(address(state_contract));
-        address service_contract = this.create_service(address(state_contract));
+        address vault_contract = create_vault(address(state_contract));
+        address service_contract = create_service(address(state_contract));
         _composer[0] = vault_contract;
         _composer[1] = service_contract;
         _composer[2] = address(state_contract);
@@ -59,7 +59,7 @@ contract FactorySoccer {
         state_contract.update_teams(_team_name_1, _team_name_2);
         string memory name_game = string(abi.encodePacked(_team_name_1, "-", _team_name_2));
         factories.push(Factory(name_game, address(state_contract), address(vault_contract), address(service_contract)));
-        emit GameCreated("name_game", address(state_contract), address(vault_contract), address(service_contract));
+        emit GameCreated(name_game, address(state_contract), address(vault_contract), address(service_contract));
     }
 
     function get_states_address_by_name(string memory _name) external view returns (StateResponse memory) {
