@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "../state/StateSoccer.sol";
 import "../vaults/VaultSoccer.sol";
 import "../services/ServiceSoccer.sol";
 import "../types/factories/soccer.sol";
 
-contract FactorySoccer {
+contract FactoryManager is AccessControl, Ownable {
     address public owner;
     address[] private states;
     struct Factory {
