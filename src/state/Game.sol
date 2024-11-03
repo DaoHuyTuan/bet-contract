@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.24;
-import "../types/factories/soccer.sol";
 import "../interfaces/Rate.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "../interfaces/Game.sol";
@@ -18,6 +17,7 @@ import "./RoleManager.sol";
 contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEvents {
   using SafeERC20 for IERC20;
   using Address for address;
+  address immutable game_id;
   struct Vault {
     string team_name;
     uint256 value;
@@ -48,7 +48,7 @@ contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEv
       name = meta_data.name;
       info = _game_info.team_1_name;
     }
-   
+    game_id = address(this);
   }
 
   function bet(string memory side) external payable nonReentrant validAmount notManager {

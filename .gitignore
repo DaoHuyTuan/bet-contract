@@ -16,3 +16,4 @@ docs/
 artifacts
 artifacts/build-info
 src/*/artifacts/*.json
+src/*/artifacts

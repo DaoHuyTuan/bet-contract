@@ -7,13 +7,15 @@ import "../state/Game.sol";
 // import "../vaults/VaultSoccer.sol";
 // import "../services/ServiceSoccer.sol";
 
-import "../types/factories/soccer.sol";
 import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
-contract GameManager is AccessControl, Ownable {
+contract Tournament is AccessControl, Ownable {
     bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     address[] private states;
+    string public tournament_name;
+    uint8 public immutable genre;
+    uint256 public immutable category;
     struct Factory {
         string name;
         address state;
@@ -25,8 +27,10 @@ contract GameManager is AccessControl, Ownable {
     }
 
     Factory[] private factories;
-    constructor() Ownable(msg.sender) {
-        
+    constructor(string memory _name, uint8 _genre, uint256 _category) Ownable(msg.sender) {
+        tournament_name = _name;
+        genre = _genre;
+        category = _category;
     }
 
     event GameCreated(string indexed game_name, address indexed state);
@@ -47,7 +51,7 @@ contract GameManager is AccessControl, Ownable {
         if (bytes(name).length > 0) {
             meta_data.name = name;
         }
-        Game state_contract = new Game(owner(), game_info, meta_data);
+        Game state_contract = new Game(game_info, meta_data);
         // address vault_contract = create_vault(address(state_contract));
         // address service_contract = create_service(address(state_contract));
         // string memory name_game = string(abi.encodePacked(_team_name_1, "-", _team_name_2));
