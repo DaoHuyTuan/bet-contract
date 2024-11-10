@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/Roles.sol";
 import "../state/Game.sol";
 // import "../vaults/VaultSoccer.sol";
 // import "../services/ServiceSoccer.sol";
@@ -14,7 +15,7 @@ contract Tournament is AccessControl, Ownable {
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     address[] private states;
     string public tournament_name;
-    uint8 public immutable genre;
+    uint256 public immutable genre;
     uint256 public immutable category;
     struct Factory {
         string name;
@@ -27,8 +28,8 @@ contract Tournament is AccessControl, Ownable {
     }
 
     Factory[] private factories;
-    constructor(string memory _name, uint8 _genre, uint256 _category) Ownable(msg.sender) {
-        tournament_name = _name;
+    constructor(uint256 _genre, uint256 _category) Ownable(msg.sender) {
+        // tournament_name = _name;
         genre = _genre;
         category = _category;
     }
@@ -75,4 +76,5 @@ contract Tournament is AccessControl, Ownable {
     function get_states_address_by_index(uint256 idx) external view returns (Factory memory) {
         return factories[idx];
     }
+    
 }

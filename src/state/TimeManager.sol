@@ -9,21 +9,28 @@ contract TimeManager {
         mint_time = block.timestamp;
     }
 
-    modifier validStartTime(uint256 time) {
-        require(time > time_start, "New start time can't not older current start time");
-        _;
-    }
+    // modifier validStartTime(uint256 time) {
+    //     require(time > time_start, "New start time can't not older current start time");
+    //     _;
+    // }
 
-    modifier validEndTime(uint256 time) {
-        require(time > time_end, "New end time can't not older current end time");
-        _;
-    }
+    // modifier validEndTime(uint256 time) {
+    //     require(time > time_end, "New end time can't not older current end time");
+    //     _;
+    // }
 
-    function update_start_time(uint256 time) external validStartTime(time) {
+    // function update_start_time(uint256 time) external validStartTime(time) {
+    //     time_start = time;
+    // }
+
+    // function update_end_time(uint256 time) external validEndTime(time) {
+    //     time_end = time;
+    // }
+    function update_start_time(uint256 time) external {
         time_start = time;
     }
 
-    function update_end_time(uint256 time) external validEndTime(time) {
+    function update_end_time(uint256 time) external {
         time_end = time;
     }
 }

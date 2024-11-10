@@ -10,26 +10,33 @@ contract RoleManager is AccessControl, Ownable {
     constructor() Ownable(msg.sender) {
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
-    modifier onlyAdmin() {
-        require(hasRole(ADMIN_ROLE, msg.sender));
-        _;
-    }
+    // modifier onlyAdmin() {
+    //     require(hasRole(ADMIN_ROLE, msg.sender));
+    //     _;
+    // }
 
-    modifier onlyManagerTeam() {
-        require(hasRole(ADMIN_ROLE, msg.sender) || hasRole(SUPPORT_ROLE, msg.sender));
-        _;
-    }
+    // modifier onlyManagerTeam() {
+        
+    // }
 
     function grantAdminRole(address admin) external onlyOwner {
         _grantRole(ADMIN_ROLE, admin);
         renounceOwnership();
     }
 
-    function grantSupportRole(address supporter) external onlyAdmin {
+    function isManagerTeam() private view {
+        require(hasRole(ADMIN_ROLE, msg.sender) || hasRole(SUPPORT_ROLE, msg.sender));
+    }
+
+    function grantSupportRole(address supporter) external {
+        isManagerTeam();
         _grantRole(SUPPORT_ROLE, supporter);
     }
 
-    function revokeSupporter(address supporter) external onlyAdmin {
+    function revokeSupporter(address supporter) external {
+        isManagerTeam();
         _revokeRole(SUPPORT_ROLE, supporter);
     }
+
+ 
 }

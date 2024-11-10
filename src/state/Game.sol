@@ -13,10 +13,13 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "./TimeManager.sol";
 import "./RoleManager.sol";
+import "../libraries/Permission.sol";
 
-contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEvents {
+
+contract Game is IGame, AccessControl, TimeManager, Pausable, ReentrancyGuard, IEvents {
   using SafeERC20 for IERC20;
   using Address for address;
+  using Permission for AccessControl;
   address immutable game_id;
   struct Vault {
     string team_name;
@@ -27,15 +30,15 @@ contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEv
   string public info;
   mapping(address => Vault) public vault;
 
-  modifier onlyParticipant() {
-    require(hasRole(PARTICIPANT_ROLE, msg.sender), "You are not in the vault");
-    _;
-  }
+  // modifier onlyParticipant() {
+  //   require(hasRole(PARTICIPANT_ROLE, msg.sender), "You are not in the vault");
+  //   _;
+  // }
 
-  modifier notManager() {
-    require(!hasRole(ADMIN_ROLE, msg.sender) && !hasRole(SUPPORT_ROLE, msg.sender));
-    _;
-  }
+  // modifier notManager() {
+  //   require(!hasRole(ADMIN_ROLE, msg.sender) && !hasRole(SUPPORT_ROLE, msg.sender));
+  //   _;
+  // }
 
 
   modifier validAmount() {
@@ -48,10 +51,12 @@ contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEv
       name = meta_data.name;
       info = _game_info.team_1_name;
     }
+    Permission.grant_admin(this, msg.sender);
     game_id = address(this);
   }
 
-  function bet(string memory side) external payable nonReentrant validAmount notManager {
+  function bet(string memory side) external payable nonReentrant validAmount {
+    Permission.notManager(this);
     Vault memory user = vault[msg.sender];
     if (user.value > 0) {
       user.value += msg.value;
@@ -65,9 +70,13 @@ contract Game is IGame, RoleManager, TimeManager, Pausable, ReentrancyGuard, IEv
     }
   }
 
-  function withdraw() external payable nonReentrant onlyParticipant {
-    
+  function withdraw() external payable nonReentrant  {
+    // onlyParticipant();
   }
-  function claim() external payable nonReentrant onlyParticipant {}
-  function switch_side() external payable nonReentrant onlyParticipant {}
+  function claim() external payable nonReentrant {
+    // onlyParticipant();
+  }
+  function switch_side() external payable nonReentrant {
+    // onlyParticipant();
+  }
 }
