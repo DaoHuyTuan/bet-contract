@@ -1,19 +1,22 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./Tournament.sol";
 
 contract TournamentsManager is Ownable {
 
-    struct STournament {
+    struct ITournament {
         string name;
+        uint256 genre;
+        uint256 category;
         address tournament_address;
     }
 
 
-    STournament[] private tournaments;
-
-    event TournamentCreated(string indexed tournament_name, address indexed tournament_address);
+    // STournament[] public tournaments;
+    mapping(uint256 => ITournament) tournaments;
+    uint256 public total = 0;
+    event TournamentCreated(string indexed tournament_name, address indexed tournament_address, uint256 genre, uint256 category);
 
     constructor() Ownable(msg.sender) {
 
@@ -21,8 +24,13 @@ contract TournamentsManager is Ownable {
 
     function create_tournament(string memory name, uint256 genre, uint256 category) external payable {
         Tournament new_tournament = new Tournament(name, genre, category);
-        tournaments.push(STournament(name, address(new_tournament)));
-        emit TournamentCreated(name, address(new_tournament));
+        tournaments[total] = ITournament(name, genre, category, address(new_tournament));
+        total += 1;
+        emit TournamentCreated(name, address(new_tournament), genre, category);
+    }
+
+    function get_tournament(uint256 index) external view returns (ITournament memory) {
+        return tournaments[index];
     }
 
 }

@@ -3,14 +3,16 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/access/Roles.sol";
 import "../state/Game.sol";
+import "../libraries/Permission.sol";
+
 // import "../vaults/VaultSoccer.sol";
 // import "../services/ServiceSoccer.sol";
 
 import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
 contract Tournament is AccessControl, Ownable {
+    using Permission for AccessControl;
     bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     address[] private states;
@@ -28,8 +30,8 @@ contract Tournament is AccessControl, Ownable {
     }
 
     Factory[] private factories;
-    constructor(uint256 _genre, uint256 _category) Ownable(msg.sender) {
-        // tournament_name = _name;
+    constructor(string memory _name, uint256 _genre, uint256 _category) Ownable(msg.sender) {
+        tournament_name = _name;
         genre = _genre;
         category = _category;
     }
@@ -38,7 +40,8 @@ contract Tournament is AccessControl, Ownable {
     event GameVaultCreated(address);
     event GameServiceCreated(address);
 
-    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external payable onlyOwner {
+    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external payable {
+        Permission.onlyManager(this);
         IRate.Rate memory base_rate = IRate.Rate({
             team_1_rate: _team_rate_1,
             team_2_rate: _team_rate_2
