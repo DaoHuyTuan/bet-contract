@@ -28,6 +28,7 @@ contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEve
   string public info;
   mapping(address => Vault) public vault;
 
+  // constructor(string _team_1_name, string _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate)
   constructor(IGame.GameInfo memory _game_info, IGame.GameMetaData memory meta_data) TimeManager() {
     if (bytes(meta_data.name).length > 0) {
       name = meta_data.name;
