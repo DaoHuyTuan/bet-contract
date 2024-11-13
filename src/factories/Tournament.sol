@@ -1,7 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
-
-import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "../state/Game.sol";
 import "../libraries/Permission.sol";
@@ -11,10 +9,7 @@ import "../libraries/Permission.sol";
 
 import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
-contract Tournament is AccessControl, Ownable {
-    using Permission for AccessControl;
-    bytes32 public constant OWNER_ROLE = keccak256("OWNER_ROLE");
-    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+contract Tournament is Permission, Ownable {
     address[] private states;
     string public tournament_name;
     uint256 public immutable genre;
@@ -33,7 +28,8 @@ contract Tournament is AccessControl, Ownable {
     constructor(string memory _name, uint256 _genre, uint256 _category) Ownable(msg.sender) {
         tournament_name = _name;
         genre = _genre;
-        category = _category;
+        category = _category;   
+         _grantRole(ADMIN_ROLE, msg.sender);
     }
 
     event GameCreated(string indexed game_name, address indexed state);
@@ -41,7 +37,7 @@ contract Tournament is AccessControl, Ownable {
     event GameServiceCreated(address);
 
     function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external {
-        Permission.onlyManager(this);
+        // Permission.onlyManager(this);
         IRate.Rate memory base_rate = IRate.Rate({
             team_1_rate: _team_rate_1,
             team_2_rate: _team_rate_2

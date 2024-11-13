@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.24;
 import "../interfaces/Rate.sol";
-import "@openzeppelin/contracts/access/AccessControl.sol";
 import "../interfaces/Game.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -16,10 +15,9 @@ import "./RoleManager.sol";
 import "../libraries/Permission.sol";
 
 
-contract Game is IGame, AccessControl, TimeManager, Pausable, ReentrancyGuard, IEvents {
+contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEvents {
   using SafeERC20 for IERC20;
   using Address for address;
-  using Permission for AccessControl;
   address immutable game_id;
   struct Vault {
     string team_name;
@@ -30,33 +28,16 @@ contract Game is IGame, AccessControl, TimeManager, Pausable, ReentrancyGuard, I
   string public info;
   mapping(address => Vault) public vault;
 
-  // modifier onlyParticipant() {
-  //   require(hasRole(PARTICIPANT_ROLE, msg.sender), "You are not in the vault");
-  //   _;
-  // }
-
-  // modifier notManager() {
-  //   require(!hasRole(ADMIN_ROLE, msg.sender) && !hasRole(SUPPORT_ROLE, msg.sender));
-  //   _;
-  // }
-
-
-  modifier validAmount() {
-    require(msg.value > 0, "Amount must more than 0 ether");
-    _;
-  }
-
   constructor(IGame.GameInfo memory _game_info, IGame.GameMetaData memory meta_data) TimeManager() {
     if (bytes(meta_data.name).length > 0) {
       name = meta_data.name;
       info = _game_info.team_1_name;
     }
-    Permission.grant_admin(this, msg.sender);
     game_id = address(this);
   }
 
-  function bet(string memory side) external payable nonReentrant validAmount {
-    Permission.notManager(this);
+  function bet(string memory side) external payable nonReentrant {
+    require(msg.value > 0, "Amount must more than 0 ether");  
     Vault memory user = vault[msg.sender];
     if (user.value > 0) {
       user.value += msg.value;
