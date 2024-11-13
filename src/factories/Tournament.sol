@@ -40,7 +40,7 @@ contract Tournament is AccessControl, Ownable {
     event GameVaultCreated(address);
     event GameServiceCreated(address);
 
-    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external payable {
+    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external {
         Permission.onlyManager(this);
         IRate.Rate memory base_rate = IRate.Rate({
             team_1_rate: _team_rate_1,

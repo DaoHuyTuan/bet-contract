@@ -22,7 +22,7 @@ contract TournamentsManager is Ownable {
 
     }
 
-    function create_tournament(string memory name, uint256 genre, uint256 category) external payable {
+    function create_tournament(string memory name, uint256 genre, uint256 category) external {
         Tournament new_tournament = new Tournament(name, genre, category);
         tournaments[total] = ITournament(name, genre, category, address(new_tournament));
         total += 1;
