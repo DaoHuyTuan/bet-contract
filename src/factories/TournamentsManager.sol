@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.24;
-import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./Tournament.sol";
 
 contract TournamentsManager is Ownable {

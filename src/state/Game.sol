@@ -13,44 +13,65 @@ import "@openzeppelin/contracts/utils/Address.sol";
 import "./TimeManager.sol";
 import "./RoleManager.sol";
 import "../libraries/Permission.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
 contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEvents {
-  using SafeERC20 for IERC20;
+  using SafeMath for uint256;
+  
   using Address for address;
   address immutable game_id;
   struct Vault {
-    string team_name;
+    uint256 team_side;
     uint256 value;
   }
-
-  string public name;
+  uint256 public total1 = 0;
+  uint256 public total2 = 0;
+  string public game_name;
+  string public team_1_name;
+  string public team_2_name;
+  uint256 public team_1_rate;
+  uint256 public team_2_rate;
+  uint256 public constant PRECISION = 1e18;
   string public info;
   mapping(address => Vault) public vault;
-
-  // constructor(string _team_1_name, string _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate)
-  constructor(IGame.GameInfo memory _game_info, IGame.GameMetaData memory meta_data) TimeManager() {
-    if (bytes(meta_data.name).length > 0) {
-      name = meta_data.name;
-      info = _game_info.team_1_name;
-    }
+  uint256 public rate;
+  constructor(string memory _team_1_name, string memory _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate, string memory _game_name) TimeManager() {
+    game_name = _game_name;
+    team_1_name = _team_1_name;
+    team_2_name = _team_2_name;
+    team_1_rate = _team_1_rate;
+    team_2_rate = _team_2_rate;
     game_id = address(this);
   }
 
-  function bet(string memory side) external payable nonReentrant {
-    require(msg.value > 0, "Amount must more than 0 ether");  
-    Vault memory user = vault[msg.sender];
+  function update_rate() internal nonReentrant {
+    rate = total1.mul(PRECISION).div(total2);
+  }
+
+  function bet(uint256 side) external payable nonReentrant {
+    require(msg.value != 0, "Amount must more than 0 ether");  
+    require(side == 0 || side == 1, "Side only 0 and 1") ;
+    Vault storage user = vault[msg.sender];
     if (user.value > 0) {
       user.value += msg.value;
       emit UpdateBet(msg.sender, msg.value);
     } else {
       vault[msg.sender] = Vault({
         value: msg.value,
-        team_name: side
+        team_side: side
       });
       emit Bet(side, msg.sender, msg.value);
     }
+    if (side == 0) {
+      total1 += msg.value;
+    } else {
+      total2 += msg.value;
+    }
+    update_rate();
   }
+
+  
 
   function withdraw() external payable nonReentrant  {
     // onlyParticipant();

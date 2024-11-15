@@ -34,7 +34,7 @@ interface IGame {
         GameCategory category;
     }
     // Function
-    function bet(string memory side) external payable;
+    function bet(uint256 side) external payable;
     function withdraw() external payable;
     function claim() external payable;
 }

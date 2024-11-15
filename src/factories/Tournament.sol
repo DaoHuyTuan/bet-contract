@@ -37,24 +37,11 @@ contract Tournament is Permission, Ownable {
     event GameServiceCreated(address);
 
     function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external {
-        // Permission.onlyManager(this);
-        IRate.Rate memory base_rate = IRate.Rate({
-            team_1_rate: _team_rate_1,
-            team_2_rate: _team_rate_2
-        });
-        IGame.GameInfo memory game_info = IGame.GameInfo({
-            team_1_name: _team_name_1,
-            team_2_name: _team_name_2,
-            base_rate: base_rate
-        });
         IGame.GameMetaData memory meta_data;
         if (bytes(name).length > 0) {
             meta_data.name = name;
         }
-        Game state_contract = new Game(game_info, meta_data);
-        // address vault_contract = create_vault(address(state_contract));
-        // address service_contract = create_service(address(state_contract));
-        // string memory name_game = string(abi.encodePacked(_team_name_1, "-", _team_name_2));
+        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name);
         factories.push(Factory(name, address(state_contract)));
         emit GameCreated(name, address(state_contract));
     }
