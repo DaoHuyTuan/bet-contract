@@ -4,7 +4,6 @@ import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
 // import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
 import "../interfaces/Event.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -16,7 +15,7 @@ import "../libraries/Permission.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
-contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEvents {
+contract Game is TimeManager, IGame, ReentrancyGuard, IEvents {
   using SafeMath for uint256;
   
   using Address for address;
@@ -36,7 +35,7 @@ contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEve
   string public info;
   mapping(address => Vault) public vault;
   uint256 public rate;
-  constructor(string memory _team_1_name, string memory _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate, string memory _game_name) TimeManager() {
+  constructor(string memory _team_1_name, string memory _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate, string memory _game_name) {
     game_name = _game_name;
     team_1_name = _team_1_name;
     team_2_name = _team_2_name;
@@ -50,6 +49,7 @@ contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEve
   }
 
   function bet(uint256 side) external payable nonReentrant {
+    if (!isCanBet()) revert GameError.GameNotStart();
     require(msg.value != 0, "Amount must more than 0 ether");  
     require(side == 0 || side == 1, "Side only 0 and 1") ;
     Vault storage user = vault[msg.sender];
@@ -74,12 +74,14 @@ contract Game is IGame, Permission, TimeManager, Pausable, ReentrancyGuard, IEve
   
 
   function withdraw() external payable nonReentrant  {
-    // onlyParticipant();
+    if (!isCanBet()) revert GameError.GameNotStart();
+    onlyParticipant();
+
   }
   function claim() external payable nonReentrant {
-    // onlyParticipant();
+    onlyParticipant();
   }
   function switch_side() external payable nonReentrant {
-    // onlyParticipant();
+    onlyParticipant();
   }
 }
