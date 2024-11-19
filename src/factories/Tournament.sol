@@ -9,11 +9,13 @@ import "../libraries/Permission.sol";
 
 import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
+
 contract Tournament is Permission, Ownable {
     address[] private states;
     string public tournament_name;
     uint256 public immutable genre;
     uint256 public immutable category;
+    // address public tax_contract;
     struct Factory {
         string name;
         address state;
@@ -29,6 +31,7 @@ contract Tournament is Permission, Ownable {
         tournament_name = _name;
         genre = _genre;
         category = _category;   
+        // tax_contract = _tax_contract;
          _grantRole(ADMIN_ROLE, msg.sender);
     }
 
@@ -36,12 +39,12 @@ contract Tournament is Permission, Ownable {
     event GameVaultCreated(address);
     event GameServiceCreated(address);
 
-    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name) external {
+    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name, address tax_contract) external {
         IGame.GameMetaData memory meta_data;
         if (bytes(name).length > 0) {
             meta_data.name = name;
         }
-        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name);
+        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name, tax_contract);
         factories.push(Factory(name, address(state_contract)));
         emit GameCreated(name, address(state_contract));
     }
