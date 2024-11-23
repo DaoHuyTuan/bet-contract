@@ -59,7 +59,7 @@ contract Permission is AccessControl {
         // require(!accessControl.hasRole(ADMIN_ROLE, msg.sender) && !accessControl.hasRole(SUPPORT_ROLE, msg.sender), "You must not be manager");
     }
 
-    function grant_support(address account) internal {
+    function grant_support(address account) external {
         onlyAdmin();
         _grantRole(SUPPORT_ROLE, account);
     }

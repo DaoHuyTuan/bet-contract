@@ -10,11 +10,15 @@ import "../libraries/Permission.sol";
 import "../interfaces/Rate.sol";
 import "../interfaces/Game.sol";
 
-contract Tournament is Permission, Ownable {
+interface ITournamentContract {
+    function init(string calldata _name, uint256 _genre, uint256 _category) external;
+}
+
+contract Tournament is Permission {
     address[] private states;
     string public tournament_name;
-    uint256 public immutable genre;
-    uint256 public immutable category;
+    uint256 public genre;
+    uint256 public category;
     // address public tax_contract;
     struct Factory {
         string name;
@@ -27,12 +31,12 @@ contract Tournament is Permission, Ownable {
     }
 
     Factory[] private factories;
-    constructor(string memory _name, uint256 _genre, uint256 _category) Ownable(msg.sender) {
+    // constructor() Ownable(msg.sender) {}
+    function init(string calldata _name, uint256 _genre, uint256 _category, address first_admin) external {
         tournament_name = _name;
         genre = _genre;
         category = _category;   
-        // tax_contract = _tax_contract;
-         _grantRole(ADMIN_ROLE, msg.sender);
+        _grantRole(ADMIN_ROLE, first_admin);
     }
 
     event GameCreated(string indexed game_name, address indexed state);
@@ -40,11 +44,12 @@ contract Tournament is Permission, Ownable {
     event GameServiceCreated(address);
 
     function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name, address tax_contract) external {
+        onlyManager();
         IGame.GameMetaData memory meta_data;
         if (bytes(name).length > 0) {
             meta_data.name = name;
         }
-        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name, tax_contract);
+        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name, tax_contract, msg.sender);
         factories.push(Factory(name, address(state_contract)));
         emit GameCreated(name, address(state_contract));
     }

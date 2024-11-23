@@ -36,7 +36,7 @@ contract Game is TimeManager, IGame, ReentrancyGuard, IEvents {
   string public info;
   mapping(address => Vault) public vault;
   uint256 public rate;
-  constructor(string memory _team_1_name, string memory _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate, string memory _game_name, address  _tax_contract) {
+  constructor(string memory _team_1_name, string memory _team_2_name, uint256 _team_1_rate, uint256 _team_2_rate, string memory _game_name, address  _tax_contract, address _first_admin) {
     game_name = _game_name;
     team_1_name = _team_1_name;
     team_2_name = _team_2_name;
@@ -44,6 +44,7 @@ contract Game is TimeManager, IGame, ReentrancyGuard, IEvents {
     team_2_rate = _team_2_rate;
     tax_contract = ITaxManager(_tax_contract);
     game_id = address(this);
+    _grantRole(ADMIN_ROLE, _first_admin);
   }
 
   function update_rate() internal nonReentrant {
