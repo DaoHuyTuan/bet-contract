@@ -17,6 +17,7 @@ interface ITournamentContract {
 contract Tournament is Permission {
     address[] private states;
     string public tournament_name;
+    address private tax_contract;
     uint256 public genre;
     uint256 public category;
     // address public tax_contract;
@@ -32,10 +33,11 @@ contract Tournament is Permission {
 
     Factory[] private factories;
     // constructor() Ownable(msg.sender) {}
-    function init(string calldata _name, uint256 _genre, uint256 _category, address first_admin) external {
+    function init(string calldata _name, uint256 _genre, uint256 _category, address first_admin, address _tax_contract) external {
         tournament_name = _name;
         genre = _genre;
         category = _category;   
+        tax_contract = _tax_contract;
         _grantRole(ADMIN_ROLE, first_admin);
     }
 
@@ -43,13 +45,13 @@ contract Tournament is Permission {
     event GameVaultCreated(address);
     event GameServiceCreated(address);
 
-    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name, address tax_contract) external {
+    function create_game(string memory _team_name_1, string memory _team_name_2, uint256 _team_rate_1, uint256 _team_rate_2, string memory name, address _tax_contract) external {
         onlyManager();
         IGame.GameMetaData memory meta_data;
         if (bytes(name).length > 0) {
             meta_data.name = name;
         }
-        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name, tax_contract, msg.sender);
+        Game state_contract = new Game(_team_name_1, _team_name_2,_team_rate_1, _team_rate_2, name, _tax_contract, msg.sender);
         factories.push(Factory(name, address(state_contract)));
         emit GameCreated(name, address(state_contract));
     }
